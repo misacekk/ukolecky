@@ -5,6 +5,9 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
@@ -19,6 +22,16 @@
     <padding>
         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
     </padding>
+   <MenuBar>
+      <menus>
+         <Menu mnemonicParsing="false" text="Soubor">
+           <items>
+             <MenuItem mnemonicParsing="false" onAction="#nacist" text="Načíst" />
+               <MenuItem mnemonicParsing="false" onAction="#ulozit" text="Uložit" />
+           </items>
+         </Menu>
+      </menus>
+   </MenuBar>
 
     <Label text="Správce školních úkolů">
         <font>
@@ -53,13 +66,12 @@
 
     <HBox alignment="CENTER" spacing="10.0">
         <Button onAction="#removeUkol" prefWidth="100.0" text="Smazat" />
-        <Button onAction="#nacist" prefWidth="100.0" text="Načíst" />
         <Button onAction="#ulozitZmeny" prefWidth="100.0" text="Uložit změny" />
         <Button onAction="#zobrazDetail" prefWidth="100.0" text="Detail" />
     </HBox>
    <Label text="Hledej úkol">
       <VBox.margin>
-         <Insets bottom="-5.0" top="15.0" />
+         <Insets bottom="-5.0" top="5.0" />
       </VBox.margin>
    </Label>
    <TextField fx:id="searchField" />

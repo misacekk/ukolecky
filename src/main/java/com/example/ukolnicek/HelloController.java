@@ -85,6 +85,11 @@ public class HelloController {
     }
 
     @FXML
+    private void ulozit() {
+        taskListView.refresh();
+    }
+
+    @FXML
     private void hledejUkol() {
         String hledane = searchField.getText().toLowerCase();
         for (Ukol u : taskListView.getItems()) {
