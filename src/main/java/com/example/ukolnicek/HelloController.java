@@ -1,5 +1,8 @@
 package com.example.ukolnicek;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -20,10 +23,18 @@ public class HelloController {
     @FXML
     private Label nazevLabel, predmetLabel, splnenoLabel;
 
+    private final ObservableList<Ukol> vsechnyUkoly = FXCollections.observableArrayList();
+
+    private FilteredList<Ukol> filtrovaneUkoly;
+
     @FXML
     public void initialize() {
-        taskListView.getItems().add(new Ukol("Java test", "PRG", false));
-        taskListView.getItems().add(new Ukol("Cover letter", "AJ", true));
+        vsechnyUkoly.add(new Ukol("Java test", "PRG", false));
+        vsechnyUkoly.add(new Ukol("Cover letter", "AJ", true));
+
+        filtrovaneUkoly = new FilteredList<>(vsechnyUkoly, p -> true);
+
+        taskListView.setItems(filtrovaneUkoly);
     }
 
     @FXML
@@ -36,7 +47,7 @@ public class HelloController {
             boolean jeSplneno = splnenoCheck.isSelected();
 
             Ukol novyUkol = new Ukol(text, predmet, jeSplneno);
-            taskListView.getItems().add(novyUkol);
+            vsechnyUkoly.add(novyUkol);
 
             taskInput.clear();
             splnenoCheck.setSelected(false);
@@ -45,23 +56,22 @@ public class HelloController {
 
     @FXML
     private void removeUkol() {
-        int index = taskListView.getSelectionModel().getSelectedIndex();
-        if (index >= 0) {
-            taskListView.getItems().remove(index);
+        Ukol vybrany = taskListView.getSelectionModel().getSelectedItem();
+        if (vybrany != null) {
+            vsechnyUkoly.remove(vybrany);
         }
     }
 
     @FXML
     private void ulozitZmeny() {
-        int index = taskListView.getSelectionModel().getSelectedIndex();
+        Ukol vybrany = taskListView.getSelectionModel().getSelectedItem();
         String novyText = taskInput.getText();
         RadioButton selectedRB = (RadioButton) subjectGroup.getSelectedToggle();
 
-        if (index >= 0 && !novyText.trim().isEmpty() && selectedRB != null) {
-            Ukol ukol = taskListView.getItems().get(index);
-            ukol.setNazev(novyText);
-            ukol.setPredmet(selectedRB.getText());
-            ukol.setSplneno(splnenoCheck.isSelected());
+        if (vybrany != null && !novyText.trim().isEmpty() && selectedRB != null) {
+            vybrany.setNazev(novyText);
+            vybrany.setPredmet(selectedRB.getText());
+            vybrany.setSplneno(splnenoCheck.isSelected());
 
             taskListView.refresh();
             taskInput.clear();
@@ -80,6 +90,35 @@ public class HelloController {
     }
 
     @FXML
+    private void zobrazVse() {
+        filtrovaneUkoly.setPredicate(ukol -> true);
+    }
+
+    @FXML
+    private void zobrazSplnene() {
+        filtrovaneUkoly.setPredicate(ukol -> ukol.isSplneno());
+    }
+
+    @FXML
+    private void zobrazNesplnene() {
+        filtrovaneUkoly.setPredicate(ukol -> !ukol.isSplneno());
+    }
+
+    @FXML
+    private void hledejUkol() {
+        String hledane = searchField.getText().toLowerCase();
+        filtrovaneUkoly.setPredicate(ukol -> {
+            if (hledane.isEmpty()) return true;
+            return ukol.getNazev().toLowerCase().contains(hledane);
+        });
+    }
+
+    @FXML
+    private void konec() {
+        javafx.application.Platform.exit();
+    }
+
+    @FXML
     private void nacist() {
         taskListView.refresh();
     }
@@ -87,17 +126,5 @@ public class HelloController {
     @FXML
     private void ulozit() {
         taskListView.refresh();
-    }
-
-    @FXML
-    private void hledejUkol() {
-        String hledane = searchField.getText().toLowerCase();
-        for (Ukol u : taskListView.getItems()) {
-            if (u.getNazev().toLowerCase().contains(hledane)) {
-                taskListView.getSelectionModel().select(u);
-                zobrazDetail();
-                return;
-            }
-        }
     }
 }

@@ -26,8 +26,16 @@
       <menus>
          <Menu mnemonicParsing="false" text="Soubor">
            <items>
+               <MenuItem mnemonicParsing="false" onAction="#konec" text="Konec" />
              <MenuItem mnemonicParsing="false" onAction="#nacist" text="Načíst" />
                <MenuItem mnemonicParsing="false" onAction="#ulozit" text="Uložit" />
+           </items>
+         </Menu>
+         <Menu mnemonicParsing="false" text="Zobrazit">
+           <items>
+             <MenuItem mnemonicParsing="false" onAction="#zobrazVse" text="Vše" />
+               <MenuItem mnemonicParsing="false" onAction="#zobrazSplnene" text="Pouze splněné" />
+               <MenuItem mnemonicParsing="false" onAction="#zobrazNesplnene" text="Pouze nesplněné" />
            </items>
          </Menu>
       </menus>
