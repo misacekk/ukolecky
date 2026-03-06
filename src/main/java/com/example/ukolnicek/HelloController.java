@@ -91,18 +91,33 @@ public class HelloController {
 
     @FXML
     private void zobrazVse() {
-        filtrovaneUkoly.setPredicate(ukol -> true);
+        taskListView.setItems(vsechnyUkoly);
     }
 
     @FXML
     private void zobrazSplnene() {
-        filtrovaneUkoly.setPredicate(ukol -> ukol.isSplneno());
+        ObservableList<Ukol> splnene = FXCollections.observableArrayList();
+
+        for (Ukol ukol : vsechnyUkoly) {
+            if (ukol.isSplneno()) {
+                splnene.add(ukol);
+            }
+        }
+        taskListView.setItems(splnene);
     }
 
     @FXML
     private void zobrazNesplnene() {
-        filtrovaneUkoly.setPredicate(ukol -> !ukol.isSplneno());
+        ObservableList<Ukol> nesplnene = FXCollections.observableArrayList();
+
+        for (Ukol ukol : vsechnyUkoly) {
+            if (!ukol.isSplneno()) {
+                nesplnene.add(ukol);
+            }
+        }
+        taskListView.setItems(nesplnene);
     }
+
 
     @FXML
     private void hledejUkol() {
