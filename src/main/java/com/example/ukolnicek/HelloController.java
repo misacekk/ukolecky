@@ -6,7 +6,7 @@ import javafx.scene.control.*;
 public class HelloController {
 
     @FXML
-    private TextField taskInput;
+    private TextField taskInput, searchField;
 
     @FXML
     private ListView<Ukol> taskListView;
@@ -18,9 +18,12 @@ public class HelloController {
     private CheckBox splnenoCheck;
 
     @FXML
+    private Label nazevLabel, predmetLabel, splnenoLabel;
+
+    @FXML
     public void initialize() {
-        taskListView.getItems().add(new Ukol("Naučit se JavaFX", "PRG", false));
-        taskListView.getItems().add(new Ukol("Slovíčka", "AJ", true));
+        taskListView.getItems().add(new Ukol("Java test", "PRG", false));
+        taskListView.getItems().add(new Ukol("Cover letter", "AJ", true));
     }
 
     @FXML
@@ -63,6 +66,33 @@ public class HelloController {
             taskListView.refresh();
             taskInput.clear();
             taskListView.getSelectionModel().clearSelection();
+        }
+    }
+
+    @FXML
+    private void zobrazDetail() {
+        Ukol vybrany = taskListView.getSelectionModel().getSelectedItem();
+        if (vybrany != null) {
+            nazevLabel.setText("Název: " + vybrany.getNazev());
+            predmetLabel.setText("Předmět: " + vybrany.getPredmet());
+            splnenoLabel.setText("Splněno?: " + vybrany.isSplneno());
+        }
+    }
+
+    @FXML
+    private void nacist() {
+        taskListView.refresh();
+    }
+
+    @FXML
+    private void hledejUkol() {
+        String hledane = searchField.getText().toLowerCase();
+        for (Ukol u : taskListView.getItems()) {
+            if (u.getNazev().toLowerCase().contains(hledane)) {
+                taskListView.getSelectionModel().select(u);
+                zobrazDetail();
+                return;
+            }
         }
     }
 }
